@@ -18,8 +18,8 @@ describe('Voting', () => {
     const buttons = scryRenderedDOMComponentsWithTag(component, 'button');
 
     expect(buttons.length).to.equal(2);
-    expect(buttons[0].getDOMNode().textContent).to.equal('Trainspotting');
-    expect(buttons[1].getDOMNode().textContent).to.equal('28 Days Later');
+    expect(buttons[0].getDOMNode().textContent).to.contain('Trainspotting');
+    expect(buttons[1].getDOMNode().textContent).to.contain('28 Days Later');
   });
 
 
@@ -81,12 +81,12 @@ describe('Voting', () => {
     );
 
     let firstButton = scryRenderedDOMComponentsWithTag(component, 'button')[0];
-    expect(firstButton.getDOMNode().textContent).to.equal('Trainspotting');
+    expect(firstButton.getDOMNode().textContent).to.contain('Trainspotting');
 
     pair[0] = 'Sunshine';
     component.setProps({pair: pair});
     firstButton = scryRenderedDOMComponentsWithTag(component, 'button')[0];
-    expect(firstButton.getDOMNode().textContent).to.equal('Trainspotting');
+    expect(firstButton.getDOMNode().textContent).to.contain('Trainspotting');
   });
 
   it('does update DOM when prop chnages', () => {
@@ -96,11 +96,11 @@ describe('Voting', () => {
     );
 
     let firstButton = scryRenderedDOMComponentsWithTag(component, 'button')[0];
-    expect(firstButton.getDOMNode().textContent).to.equal('Trainspotting');
+    expect(firstButton.getDOMNode().textContent).to.contain('Trainspotting');
 
     const newPair = pair.set(0, 'Sunshine');
     component.setProps({pair: newPair});
     firstButton = scryRenderedDOMComponentsWithTag(component, 'button')[0];
-    expect(firstButton.getDOMNode().textContent).to.equal('Sunshine');
+    expect(firstButton.getDOMNode().textContent).to.contain('Sunshine');
   });
 });

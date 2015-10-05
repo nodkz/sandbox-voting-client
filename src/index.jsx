@@ -1,7 +1,9 @@
 import React from 'react';
 import Router, {Route, DefaultRoute} from 'react-router';
-import {createStore, applyMiddleware} from 'redux';
-import {Provider} from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { devTools, persistState } from 'redux-devtools';
+import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+import { Provider } from 'react-redux';
 import io from 'socket.io-client';
 
 import reducer from './reducer';
@@ -28,10 +30,15 @@ socket.on('state', state => {
     )
 );
 
-const createStoreWithMiddleware = applyMiddleware(
-  remoteActionMiddleware(socket)
+const finalCreateStore = compose(
+  // Enables your middleware:
+  applyMiddleware(remoteActionMiddleware(socket)), // any Redux middleware, e.g. redux-thunk
+  // Provides support for DevTools:
+  devTools(),
+  // Lets you write ?debug_session=<name> in address bar to persist debug sessions
+  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
 )(createStore);
-const store = createStoreWithMiddleware(reducer);
+const store = finalCreateStore(reducer);
 store.dispatch(setClientId(getClientId()));
 
 
@@ -43,9 +50,14 @@ const routes = <Route handler={App}>
 
 Router.run(routes, (Root) => {
   React.render(
-    <Provider store={store}>
-      {() => <Root />}
-    </Provider>,
+    <div>
+      <Provider store={store}>
+        {() => <Root />}
+      </Provider>
+      {/*<DebugPanel top={true} right bottom>
+        <DevTools store={store} monitor={LogMonitor} />
+      </DebugPanel>*/}
+    </div>,
     document.getElementById('app')
   )
 });
