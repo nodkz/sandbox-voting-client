@@ -1,4 +1,5 @@
 import React from 'react/addons';
+import classNames from 'classnames';
 
 export default React.createClass({
   mixins: [React.addons.PureRenderMixin],
@@ -19,7 +20,11 @@ export default React.createClass({
             <button key={entry}
                     onClick={()=>this.props.vote(entry)}
                     disabled={this.isDisabled()}
-                    className={this.hasVotedFor(entry)? 'voted' : ''}>
+                    className={
+                      classNames({
+                        voted: this.hasVotedFor(entry)
+                      })}
+                    >
               <h1>{entry}</h1>
               <div className="label">Voted</div>
             </button>
