@@ -64,11 +64,12 @@ describe('reducer', () => {
     }));
   });
 
-  it('handles VOTE by setting hasVoted', () => {
+  it('handles VOTE by setting myVote', () => {
     const state = fromJS({
       vote: {
         pair: ['Trainspotting', '28 Days Later'],
-        tally: {Trainspotting: 1}
+        tally: {Trainspotting: 1},
+        round: 42
       }
     });
     const action = {type: 'VOTE', entry: 'Trainspotting'};
@@ -77,9 +78,13 @@ describe('reducer', () => {
     expect(nextState).to.equal(fromJS({
       vote: {
         pair: ['Trainspotting', '28 Days Later'],
-        tally: {Trainspotting: 1}
+        tally: {Trainspotting: 1},
+        round: 42
       },
-      hasVoted: 'Trainspotting'
+      myVote: {
+        round: 42,
+        entry: 'Trainspotting'
+      }
     }))
   });
 
@@ -101,19 +106,24 @@ describe('reducer', () => {
     }))
   });
 
-  it('removes hasVoted on SET_STATE if pair changes', () => {
+  it('removes myVote on SET_STATE if round has changed', () => {
     const initialState = fromJS({
       vote: {
         pair: ['Trainspotting', '28 Days Later'],
-        tally: {Trainspotting: 1}
+        tally: {Trainspotting: 1},
+        round: 33
       },
-      hasVoted: 'Trainspotting'
+      myVote: {
+        round: 33,
+        entry: 'Trainspotting'
+      }
     });
     const action = {
       type: 'SET_STATE',
       state: {
         vote: {
-          pair: ['Sunshine', 'Slumdog Millionaire']
+          pair: ['Sunshine', 'Slumdog Millionaire'],
+          round: 34,
         }
       }
     };
@@ -121,8 +131,19 @@ describe('reducer', () => {
 
     expect(nextState).to.equal(fromJS({
       vote: {
-        pair: ['Sunshine', 'Slumdog Millionaire']
+        pair: ['Sunshine', 'Slumdog Millionaire'],
+        round: 34
       }
+    }));
+  });
+
+  it('handles SET_CLIENT_ID', () => {
+    const initialState = Map();
+    const action = {type: 'SET_CLIENT_ID', clientId: '1234'};
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).to.equal(fromJS({
+      clientId: '1234'
     }));
   });
 });

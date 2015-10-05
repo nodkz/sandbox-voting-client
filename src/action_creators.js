@@ -3,7 +3,7 @@ export function setState(state) {
     type: 'SET_STATE',
     state
   }
-};
+}
 
 export function vote(entry) {
   return {
@@ -11,11 +11,33 @@ export function vote(entry) {
     type: 'VOTE',
     entry
   }
-};
+}
 
 export function next() {
   return {
     meta: {remote: true},
     type: 'NEXT'
+  }
+}
+
+export function setClientId(clientId) {
+  return {
+    type: 'SET_CLIENT_ID',
+    clientId
+  }
+}
+
+export function restart() {
+  return {
+    meta: {remote: true},
+    type: 'RESTART'
+  }
+}
+
+export function setConnectionState(state, connected) {
+  return {
+    type: 'SET_CONNECTION_STATE',
+    state,
+    connected
   }
 }
